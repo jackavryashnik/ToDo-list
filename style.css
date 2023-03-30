@@ -36,11 +36,11 @@ header h1 {
     color: var(--gray)
 }
 
-#new-task-form {
+/* #new-task-form {
     display: flex;
-}
+} */
 
-input, button {
+input, button, textarea {
     appearance: none;
     border: none;
     outline: none;
@@ -57,8 +57,19 @@ input, button {
     font-size: 1.25rem;
 }
 
+#new-task-description::placeholder,
 #new-task-input::placeholder {
     color: var(--gray);
+}
+
+#new-task-description {
+    flex: 1 1 0%;
+    background-color: var(--darker);
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-right: 1rem;
+    color: var(--light);
+    font-size: 1.25rem;
 }
 
 #new-task-submit {
@@ -152,4 +163,21 @@ main {
 
 .task .actions .delete {
     color: crimson;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    grid-gap: 10px;
+}
+
+.item {
+    background-color: #ccc;
+    padding: 20px;
+    text-align: center;
+}
+
+.item2 {
+    grid-row: span 2;
 }

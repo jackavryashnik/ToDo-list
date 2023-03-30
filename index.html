@@ -4,21 +4,27 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task List</title>
+    <title>Task manager</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
-        <h1>Task List 2023</h1>
-        <form id="new-task-form">
+        <h1>Task manager application</h1>
+        <form id="new-task-form" class="grid-container">
             <input type="text"
+                    class="item"
                     id="new-task-input"
                     placeholder="What do you have planned?" />
-            <input 
+            <input
+                class="item item2"
                 type="submit" 
                 id="new-task-submit"
                 value="Add task" />
+            <textarea
+                placeholder="Describe this task in a little more detail"
+                class="item"   
+                id="new-task-description"></textarea>
         </form>
     </header>
 
@@ -37,6 +43,14 @@
                             value="My task"
                             readonly
                         />
+                        <textarea
+                            id="description"
+                            cols="30"
+                            rows="10"
+                            class="text"
+                            readonly>
+                        </textarea>
+                        <p class="date">2023 21:28</p>
                     </div>
                     <div class="actions">
                         <button class="edit">Edit</button>
