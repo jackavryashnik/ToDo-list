@@ -17,33 +17,26 @@ window.addEventListener('load', () => {
 
         const task_el = document.createElement("div");
         task_el.classList.add("task");
-
-        const task_contant_el = document.createElement("div");
-        task_contant_el.classList.add("content");
-        task_contant_el.classList.add("grid-container");
-
-        task_el.appendChild(task_contant_el);
+        task_el.classList.add("task-grid-container");
 
         const task_input_el = document.createElement("input");
         task_input_el.classList.add("text");
-        task_input_el.classList.add("item");
+        task_input_el.classList.add("task-title-item");
         task_input_el.type = "text";
         task_input_el.value = task;
         task_input_el.setAttribute("readonly", "readonly");
 
-        task_contant_el.appendChild(task_input_el);
+        task_el.appendChild(task_input_el);
 
         const task_descroption_el = document.createElement("input");
-        task_descroption_el.classList.add("text");
-        task_descroption_el.classList.add("item");
+        task_descroption_el.classList.add("task-description-item");
         task_descroption_el.value = taskDescription;
         task_descroption_el.setAttribute("readonly", "readonly");
 
-        task_contant_el.appendChild(task_descroption_el);
+        task_el.appendChild(task_descroption_el);
 
         const task_actions_el = document.createElement("div");
-        task_actions_el.classList.add("item");
-        task_actions_el.classList.add("item1");
+        task_actions_el.classList.add("task-actions-item");
         task_actions_el.classList.add("actions");
 
         const task_edit_el = document.createElement("button");
@@ -60,8 +53,8 @@ window.addEventListener('load', () => {
         task_el.appendChild(task_actions_el);
 
         const taskDate = document.createElement("p");
-        taskDate.innerText = new Date().toLocaleString();
-        taskDate.classList.add("item");
+        taskDate.innerText = new Date().toLocaleDateString();
+        taskDate.classList.add("task-date-item");
         task_el.appendChild(taskDate);
 
         list_el.appendChild(task_el);
@@ -73,7 +66,7 @@ window.addEventListener('load', () => {
             if (task_edit_el.innerText.toLowerCase() == "edit") {
                 task_input_el.removeAttribute("readonly")
                 task_descroption_el.removeAttribute("readonly")
-                task_input_el.focus();
+                task_descroption_el.focus();
                 task_edit_el.innerText = "Save";
             } else {
                 task_input_el.setAttribute("readonly", "readonly");
