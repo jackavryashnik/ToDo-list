@@ -41,9 +41,10 @@ input, button, textarea {
     border: none;
     outline: none;
     background: none;
+    resize: none;
 }
 
-#new-task-input {
+.main__creating-form__input {
     flex: 1 1 0%;
     background-color: var(--darker);
     padding: 1rem;
@@ -53,12 +54,12 @@ input, button, textarea {
     font-size: 1.25rem;
 }
 
-#new-task-description::placeholder,
-#new-task-input::placeholder {
+.main__creating-form__input::placeholder,
+.main__creating-form__description::placeholder {
     color: var(--gray);
 }
 
-#new-task-description {
+.main__creating-form__description {
     flex: 1 1 0%;
     background-color: var(--darker);
     padding: 1rem;
@@ -68,7 +69,7 @@ input, button, textarea {
     font-size: 1.25rem;
 }
 
-#new-task-submit {
+.main__creating-form__submit {
     color: var(--pink);
     font-size: 1.25rem;
     font-weight: 700;
@@ -79,11 +80,11 @@ input, button, textarea {
     transition: 0.4s;
 }
 
-#new-task-submit:hover {
+.main__creating-form__submit:hover {
     opacity: 0.8;
 }
 
-#new-task-submit:active {
+.main__creating-form__submit:active {
     opacity: 0.6;
 }
 
@@ -94,23 +95,23 @@ main {
     margin: 0 auto;
 }
 
-.task-list {
+.main__task-list {
     padding: 1rem;
 }
 
-.task-list h2 {
+.main__task-list h2 {
     font-size: 1.5rem;
     font-weight: 300;
     color: var(--gray);
     margin-bottom: 1rem;
 }
 
-#tasks .task {
+.main__task-list__tasks .task {
     background-color: var(--darkest);
     border-radius: 1rem;
 }
 
-#tasks .task .text {
+.main__task-list__tasks .task .text {
     color: var(--light);
     font-size: 1.125rem;
     width: 100%;
@@ -118,8 +119,8 @@ main {
     transition: 0.4s;
 }
 
-#tasks .task .text:not(:read-only),
-#tasks .task .task-description-item:not(:read-only) {
+.main__task-list__tasks .task .text:not(:read-only),
+.main__task-list__tasks .task .task-description-item:not(:read-only) {
     color: var(--pink);
 }
 
@@ -155,16 +156,17 @@ main {
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto auto;
     grid-gap: 10px;
+    margin: auto 10%;
 }
 
-.item {
+.grid-item {
     grid-column: span 2;
     background-color: #ccc;
     padding: 20px;
     text-align: center;
 }
 
-.item2 {
+.grid-item2 {
     grid-row: span 2;
     background-color: #ccc;
     padding: 20px;
