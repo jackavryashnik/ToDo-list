@@ -1,77 +1,105 @@
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
     const form = document.querySelector(".main__creating-form");
     const input = document.querySelector(".main__creating-form__input");
-    const description = document.querySelector(".main__creating-form__description");
-    const list_el = document.querySelector(".main__task-list__tasks");
+    const description = document.querySelector(
+        ".main__creating-form__description"
+    );
+    const listEl = document.querySelector(".main__task-list__tasks");
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        const task = input.value;
-        const taskDescription = description.value;
+        if (validateForm()) {
+            const task = input.value;
+            const taskDescription = description.value;
 
-        const task_el = document.createElement("div");
-        task_el.classList.add("task");
-        task_el.classList.add("task-grid-container");
+            const taskEl = document.createElement("div");
+            addClass(taskEl, ["task", "task-grid-container"]);
 
-        const task_input_el = document.createElement("input");
-        task_input_el.classList.add("text");
-        task_input_el.classList.add("task-title-item");
-        task_input_el.type = "text";
-        task_input_el.value = task;
-        task_input_el.setAttribute("readonly", "readonly");
+            const taskInputEl = document.createElement("input");
+            addClass(taskInputEl, ["text", "task-title-item"]);
+            taskInputEl.type = "text";
+            taskInputEl.value = task;
+            setAttr(taskInputEl);
 
-        task_el.appendChild(task_input_el);
+            taskEl.appendChild(taskInputEl);
 
-        const task_descroption_el = document.createElement("input");
-        task_descroption_el.classList.add("task-description-item");
-        task_descroption_el.value = taskDescription;
-        task_descroption_el.setAttribute("readonly", "readonly");
+            const taskDescroptionEl = document.createElement("input");
+            addClass(taskDescroptionEl, ["task-description-item"]);
+            taskDescroptionEl.value = taskDescription;
+            setAttr(taskDescroptionEl);
 
-        task_el.appendChild(task_descroption_el);
+            taskEl.appendChild(taskDescroptionEl);
 
-        const task_actions_el = document.createElement("div");
-        task_actions_el.classList.add("task-actions-item");
-        task_actions_el.classList.add("actions");
+            const taskActionsEl = document.createElement("div");
+            addClass(taskActionsEl, ["task-actions-item", "actions"]);
 
-        const task_edit_el = document.createElement("button");
-        task_edit_el.classList.add("edit");
-        task_edit_el.innerHTML = "Edit";
+            const taskEditEl = document.createElement("button");
+            addClass(taskEditEl, ["edit"]);
+            setText(taskEditEl, "Edit");
 
-        const task_delete_el = document.createElement("button");
-        task_delete_el.classList.add("delete");
-        task_delete_el.innerHTML = "Delete";
+            const taskDeleteEl = document.createElement("button");
+            addClass(taskDeleteEl, ["delete"]);
+            setText(taskDeleteEl, "Delete");
 
-        task_actions_el.appendChild(task_edit_el);
-        task_actions_el.appendChild(task_delete_el);
+            taskActionsEl.appendChild(taskEditEl);
+            taskActionsEl.appendChild(taskDeleteEl);
 
-        task_el.appendChild(task_actions_el);
+            taskEl.appendChild(taskActionsEl);
 
-        const taskDate = document.createElement("p");
-        taskDate.innerText = new Date().toLocaleDateString();
-        taskDate.classList.add("task-date-item");
-        task_el.appendChild(taskDate);
+            const taskDate = document.createElement("p");
+            taskDate.innerText = new Date().toLocaleDateString();
+            addClass(taskDate, ["task-date-item"]);
+            taskEl.appendChild(taskDate);
 
-        list_el.appendChild(task_el);
+            listEl.appendChild(taskEl);
 
-        input.value = "";
-        description.value = "";
+            input.value = "";
+            description.value = "";
 
-        task_edit_el.addEventListener('click', () => {
-            if (task_edit_el.innerText.toLowerCase() == "edit") {
-                task_input_el.removeAttribute("readonly")
-                task_descroption_el.removeAttribute("readonly")
-                task_descroption_el.focus();
-                task_edit_el.innerText = "Save";
-            } else {
-                task_input_el.setAttribute("readonly", "readonly");
-                task_descroption_el.setAttribute("readonly", "readonly");
-                task_edit_el.innerText = "Edit";
-            }
-        });
+            taskEditEl.addEventListener("click", () => {
+                if (taskEditEl.innerText.toLowerCase() == "edit") {
+                    removeAttr(taskInputEl);
+                    removeAttr(taskDescroptionEl);
+                    setText(taskEditEl, "Save");
+                    taskDescroptionEl.focus();
+                } else {
+                    setAttr(taskInputEl);
+                    setAttr(taskDescroptionEl);
+                    setText(taskEditEl, "Edit");
+                }
+            });
 
-        task_delete_el.addEventListener('click', () => {
-            list_el.removeChild(task_el);
-        });
+            taskDeleteEl.addEventListener("click", () => {
+                listEl.removeChild(taskEl);
+            });
+        }
     });
 });
+
+function addClass(el, arrOfClasses) {
+    for (const item of arrOfClasses) {
+        el.classList.add(item);
+    }
+}
+
+function setText(el, text) {
+    el.innerHTML = text;
+}
+
+function setAttr(el) {
+    el.setAttribute("readonly", "readonly");
+}
+
+function removeAttr(el) {
+    el.removeAttribute("readonly");
+}
+
+function validateForm() {
+    const taskInput = document.querySelector(".main__creating-form__input");
+    const taskDescription = document.querySelector(
+        ".main__creating-form__description"
+    );
+
+    return !(!taskInput.value.trim() || !taskDescription.value.trim());
+}
