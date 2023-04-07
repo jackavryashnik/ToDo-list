@@ -14,26 +14,23 @@
     </header>
 
     <main>
-        <form id="new-task-form" class="grid-container">
+        <form class="main__creating-form grid-container">
             <input type="text"
-                    class="item"
-                    id="new-task-input"
+                    class="main__creating-form__input item"
                     placeholder="What do you have planned?" />
             <input
-                class="item2"
+                class="main__creating-form__submit item2"
                 type="submit" 
-                id="new-task-submit"
                 value="Add task" />
             <textarea
                 placeholder="Describe this task in a little more detail"
-                class="item"   
-                id="new-task-description"></textarea>
+                class="main__creating-form__description item"></textarea>
         </form>
 
-        <section class="task-list">
+        <section class="main__task-list">
             <h2>Tasks</h2>
 
-            <div id="tasks">
+            <div class="main__task-list__tasks">
                 
                 <!-- <div class="task task-grid-container">
                         <input 
