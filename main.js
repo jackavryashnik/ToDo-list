@@ -1,19 +1,14 @@
 window.addEventListener('load', () => {
-    const form = document.querySelector("#new-task-form");
-    const input = document.querySelector("#new-task-input");
-    const description = document.querySelector("#new-task-description");
-    const list_el = document.querySelector("#tasks");
+    const form = document.querySelector(".main__creating-form");
+    const input = document.querySelector(".main__creating-form__input");
+    const description = document.querySelector(".main__creating-form__description");
+    const list_el = document.querySelector(".main__task-list__tasks");
 
     form.addEventListener('submit', (event) => {
         event.preventDefault();
 
         const task = input.value;
         const taskDescription = description.value;
-
-        if (!task) {
-            alert("Please fill out the task");
-            return;
-        }
 
         const task_el = document.createElement("div");
         task_el.classList.add("task");
