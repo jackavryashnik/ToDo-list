@@ -81,19 +81,19 @@ function addClass(el, arrOfClasses) {
     for (const item of arrOfClasses) {
         el.classList.add(item);
     }
-}
+};
 
 function setText(el, text) {
     el.innerHTML = text;
-}
+};
 
 function setAttr(el) {
     el.setAttribute("readonly", "readonly");
-}
+};
 
 function removeAttr(el) {
     el.removeAttribute("readonly");
-}
+};
 
 function validateForm() {
     const taskInput = document.querySelector(".main__creating-form__input");
@@ -102,4 +102,4 @@ function validateForm() {
     );
 
     return !(!taskInput.value.trim() || !taskDescription.value.trim());
-}
+};
