@@ -1,10 +1,10 @@
 window.addEventListener("load", () => {
-    const form = document.querySelector(".main__creating-form");
-    const input = document.querySelector(".main__creating-form__input");
+    const form = document.querySelector(".creating-form");
+    const input = document.querySelector(".creating-form__input");
     const description = document.querySelector(
-        ".main__creating-form__description"
+        ".creating-form__description"
     );
-    const listEl = document.querySelector(".main__task-list__tasks");
+    const listEl = document.querySelector(".task-list__tasks");
 
     form.addEventListener("submit", (event) => {
         event.preventDefault();
@@ -17,7 +17,7 @@ window.addEventListener("load", () => {
             addClass(taskEl, ["task", "task-grid-container"]);
 
             const taskInputEl = document.createElement("input");
-            addClass(taskInputEl, ["text", "task-title-item"]);
+            addClass(taskInputEl, ["text", "task__title-item"]);
             taskInputEl.type = "text";
             taskInputEl.value = task;
             setAttr(taskInputEl);
@@ -25,14 +25,14 @@ window.addEventListener("load", () => {
             taskEl.appendChild(taskInputEl);
 
             const taskDescroptionEl = document.createElement("input");
-            addClass(taskDescroptionEl, ["task-description-item"]);
+            addClass(taskDescroptionEl, ["task__description-item"]);
             taskDescroptionEl.value = taskDescription;
             setAttr(taskDescroptionEl);
 
             taskEl.appendChild(taskDescroptionEl);
 
             const taskActionsEl = document.createElement("div");
-            addClass(taskActionsEl, ["task-actions-item", "actions"]);
+            addClass(taskActionsEl, ["task__actions-item", "actions"]);
 
             const taskEditEl = document.createElement("button");
             addClass(taskEditEl, ["edit"]);
@@ -49,7 +49,7 @@ window.addEventListener("load", () => {
 
             const taskDate = document.createElement("p");
             taskDate.innerText = new Date().toLocaleDateString();
-            addClass(taskDate, ["task-date-item"]);
+            addClass(taskDate, ["task__date-item"]);
             taskEl.appendChild(taskDate);
 
             listEl.appendChild(taskEl);
@@ -96,9 +96,9 @@ function removeAttr(el) {
 };
 
 function validateForm() {
-    const taskInput = document.querySelector(".main__creating-form__input");
+    const taskInput = document.querySelector(".creating-form__input");
     const taskDescription = document.querySelector(
-        ".main__creating-form__description"
+        ".creating-form__description"
     );
 
     return !(!taskInput.value.trim() || !taskDescription.value.trim());

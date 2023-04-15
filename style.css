@@ -44,7 +44,7 @@ input, button, textarea {
     resize: none;
 }
 
-.main__creating-form__input {
+.creating-form__input {
     background-color: var(--darker);
     padding: 1rem;
     border-radius: 1rem;
@@ -53,12 +53,12 @@ input, button, textarea {
     font-size: 1.25rem;
 }
 
-.main__creating-form__input::placeholder,
-.main__creating-form__description::placeholder {
+.creating-form__input::placeholder,
+.creating-form__description::placeholder {
     color: var(--gray);
 }
 
-.main__creating-form__description {
+.creating-form__description {
     background-color: var(--darker);
     padding: 1rem;
     border-radius: 1rem;
@@ -67,7 +67,7 @@ input, button, textarea {
     font-size: 1.25rem;
 }
 
-.main__creating-form__submit {
+.creating-form__submit {
     color: var(--pink);
     font-size: 1.25rem;
     font-weight: 700;
@@ -78,11 +78,11 @@ input, button, textarea {
     transition: 0.4s;
 }
 
-.main__creating-form__submit:hover {
+.creating-form__submit:hover {
     opacity: 0.8;
 }
 
-.main__creating-form__submit:active {
+.creating-form__submit:active {
     opacity: 0.6;
 }
 
@@ -92,23 +92,23 @@ main {
     margin: 0 auto;
 }
 
-.main__task-list {
+.task-list {
     padding: 1rem;
 }
 
-.main__task-list h2 {
+.task-list h2 {
     font-size: 1.5rem;
     font-weight: 300;
     color: var(--gray);
     margin-bottom: 1rem;
 }
 
-.main__task-list__tasks .task {
+.task-list__tasks .task {
     background-color: var(--darkest);
     border-radius: 1rem;
 }
 
-.main__task-list__tasks .task .text {
+.task-list__tasks .task .text {
     color: var(--light);
     font-size: 1.125rem;
     width: 100%;
@@ -116,8 +116,8 @@ main {
     transition: 0.4s;
 }
 
-.main__task-list__tasks .task .text:not(:read-only),
-.main__task-list__tasks .task .task-description-item:not(:read-only) {
+.task-list__tasks .task .text:not(:read-only),
+.task-list__tasks .task .task-description-item:not(:read-only) {
     color: var(--pink);
 }
 
@@ -176,14 +176,14 @@ main {
     margin-bottom: 1rem;
 }
 
-.task-title-item {
+.task__title-item {
     grid-column: 1 / span 2;
     padding: 20px;
     text-align: center;
     color: var(--light);
 }
 
-.task-actions-item {
+.task__actions-item {
     grid-column: 3 / span 2;
     padding: 20px;
     text-align: center;
@@ -191,7 +191,7 @@ main {
     justify-content: space-evenly;
 }
 
-.task-description-item {
+.task__description-item {
     grid-column: 1 / span 4;
     grid-row: 2 / span 2;
     padding: 20px;
@@ -199,7 +199,7 @@ main {
     color: var(--light);
 }
 
-.task-date-item {
+.task__date-item {
     grid-column: 4;
     grid-row: 4;
     text-align: center;
