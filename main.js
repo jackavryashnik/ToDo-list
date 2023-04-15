@@ -1,45 +1,33 @@
 window.addEventListener("load", () => {
     const form = document.querySelector(".creating-form");
     const input = document.querySelector(".creating-form__input");
-    const description = document.querySelector(
-        ".creating-form__description"
-    );
+    const description = document.querySelector(".creating-form__description");
     const listEl = document.querySelector(".task-list__tasks");
 
     form.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        if (validateForm()) {
+        if (isFormValid()) {
             const task = input.value;
             const taskDescription = description.value;
 
             const taskEl = document.createElement("div");
-            addClass(taskEl, ["task", "task-grid-container"]);
+            addClasses(taskEl, ["task", "task-grid-container"]);
 
-            const taskInputEl = document.createElement("input");
-            addClass(taskInputEl, ["text", "task__title-item"]);
-            taskInputEl.type = "text";
-            taskInputEl.value = task;
-            setAttr(taskInputEl);
+            const taskInputEl = createTaskName(task);
+            const taskDescriptionEl = createTaskDescription(taskDescription);
 
-            taskEl.appendChild(taskInputEl);
-
-            const taskDescroptionEl = document.createElement("input");
-            addClass(taskDescroptionEl, ["task__description-item"]);
-            taskDescroptionEl.value = taskDescription;
-            setAttr(taskDescroptionEl);
-
-            taskEl.appendChild(taskDescroptionEl);
+            addChildrenToParent(taskEl, [taskInputEl, taskDescriptionEl]);
 
             const taskActionsEl = document.createElement("div");
-            addClass(taskActionsEl, ["task__actions-item", "actions"]);
+            addClasses(taskActionsEl, ["task__actions-item", "actions"]);
 
             const taskEditEl = document.createElement("button");
-            addClass(taskEditEl, ["edit"]);
+            addClasses(taskEditEl, ["edit"]);
             setText(taskEditEl, "Edit");
 
             const taskDeleteEl = document.createElement("button");
-            addClass(taskDeleteEl, ["delete"]);
+            addClasses(taskDeleteEl, ["delete"]);
             setText(taskDeleteEl, "Delete");
 
             taskActionsEl.appendChild(taskEditEl);
@@ -49,7 +37,7 @@ window.addEventListener("load", () => {
 
             const taskDate = document.createElement("p");
             taskDate.innerText = new Date().toLocaleDateString();
-            addClass(taskDate, ["task__date-item"]);
+            addClasses(taskDate, ["task__date-item"]);
             taskEl.appendChild(taskDate);
 
             listEl.appendChild(taskEl);
@@ -60,12 +48,12 @@ window.addEventListener("load", () => {
             taskEditEl.addEventListener("click", () => {
                 if (taskEditEl.innerText.toLowerCase() == "edit") {
                     removeAttr(taskInputEl);
-                    removeAttr(taskDescroptionEl);
+                    removeAttr(taskDescriptionEl);
                     setText(taskEditEl, "Save");
-                    taskDescroptionEl.focus();
+                    taskDescriptionEl.focus();
                 } else {
                     setAttr(taskInputEl);
-                    setAttr(taskDescroptionEl);
+                    setAttr(taskDescriptionEl);
                     setText(taskEditEl, "Edit");
                 }
             });
@@ -77,14 +65,14 @@ window.addEventListener("load", () => {
     });
 });
 
-function addClass(el, arrOfClasses) {
+function addClasses(el, arrOfClasses) {
     for (const item of arrOfClasses) {
         el.classList.add(item);
     }
 };
 
 function setText(el, text) {
-    el.innerHTML = text;
+    el.textContent = text;
 };
 
 function setAttr(el) {
@@ -95,11 +83,32 @@ function removeAttr(el) {
     el.removeAttribute("readonly");
 };
 
-function validateForm() {
+function isFormValid() {
     const taskInput = document.querySelector(".creating-form__input");
     const taskDescription = document.querySelector(
         ".creating-form__description"
     );
 
     return !(!taskInput.value.trim() || !taskDescription.value.trim());
+};
+
+function createTaskName(task) {
+    const taskName = document.createElement("input");
+    taskName.type = "text";
+    taskName.value = task;
+    addClasses(taskName, ["text", "task__title-item"]);
+    setAttr(taskName);
+    return taskName;
+}
+
+function createTaskDescription(description) {
+    const taskDescription = document.createElement("textarea");
+    taskDescription.value = description;
+    addClasses(taskDescription, ["task__description-item"]);
+    setAttr(taskDescription);
+    return taskDescription;
+};
+
+function addChildrenToParent(parent, children) {
+    parent.append(...children);
 };
