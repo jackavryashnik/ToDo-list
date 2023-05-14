@@ -1,13 +1,17 @@
-window.addEventListener("load", () => {
-    const form = document.querySelector(".creating-form");
-    const input = document.querySelector(".creating-form__input");
-    const description = document.querySelector(".creating-form__description");
-    const listEl = document.querySelector(".task-list__tasks");
+const form = document.querySelector(".creating-form");
+const input = document.querySelector(".creating-form__input");
+const description = document.querySelector(".creating-form__description");
+const listEl = document.querySelector(".task-list__tasks");
+const errorEl = document.querySelector(".error");
 
+window.addEventListener("load", () => {
     form.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        if (isFormValid()) {
+        if (!isFormValid()) {
+            showValdationError();
+        } else {
+            hideValidationError();
             const task = input.value;
             const taskDescription = description.value;
 
@@ -45,22 +49,12 @@ window.addEventListener("load", () => {
             input.value = "";
             description.value = "";
 
-            taskEditEl.addEventListener("click", () => {
-                if (taskEditEl.innerText.toLowerCase() == "edit") {
-                    removeAttr(taskInputEl);
-                    removeAttr(taskDescriptionEl);
-                    setText(taskEditEl, "Save");
-                    taskDescriptionEl.focus();
-                } else {
-                    setAttr(taskInputEl);
-                    setAttr(taskDescriptionEl);
-                    setText(taskEditEl, "Edit");
-                }
-            });
-
-            taskDeleteEl.addEventListener("click", () => {
-                listEl.removeChild(taskEl);
-            });
+            addListenersToTaskEl(
+                taskEl,
+                taskInputEl,
+                taskDescriptionEl,
+                taskEditEl
+            );
         }
     });
 });
@@ -69,28 +63,23 @@ function addClasses(el, arrOfClasses) {
     for (const item of arrOfClasses) {
         el.classList.add(item);
     }
-};
+}
 
 function setText(el, text) {
     el.textContent = text;
-};
+}
 
 function setAttr(el) {
     el.setAttribute("readonly", "readonly");
-};
+}
 
 function removeAttr(el) {
     el.removeAttribute("readonly");
-};
+}
 
 function isFormValid() {
-    const taskInput = document.querySelector(".creating-form__input");
-    const taskDescription = document.querySelector(
-        ".creating-form__description"
-    );
-
-    return !(!taskInput.value.trim() || !taskDescription.value.trim());
-};
+    return !(!input.value.trim() || !description.value.trim());
+}
 
 function createTaskName(task) {
     const taskName = document.createElement("input");
@@ -107,8 +96,89 @@ function createTaskDescription(description) {
     addClasses(taskDescription, ["task__description-item"]);
     setAttr(taskDescription);
     return taskDescription;
-};
+}
 
 function addChildrenToParent(parent, children) {
     parent.append(...children);
-};
+}
+
+function showValdationError() {
+    const messages = [];
+    if (input.value === "" || input.value === null) {
+        messages.push("Title is required");
+    }
+
+    if (description.value === "" || description.value === null) {
+        messages.push("Description is required");
+    }
+
+    if (messages.length > 0) {
+        errorEl.innerText = messages.join(", ");
+    }
+}
+
+function hideValidationError() {
+    errorEl.innerText = "";
+}
+
+function addListenersToTaskEl(
+    taskEl,
+    taskInputEl,
+    taskDescriptionEl,
+    taskEditEl
+) {
+    taskEditEl.addEventListener("click", () => {
+        if (taskEditEl.innerText.toLowerCase() == "edit") {
+            removeAttr(taskInputEl);
+            removeAttr(taskDescriptionEl);
+            setText(taskEditEl, "Save");
+            taskDescriptionEl.focus();
+        } else {
+            if (
+                !isTaskInputEmpty(taskInputEl) &&
+                !isTaskInputEmpty(taskDescriptionEl)
+            ) {
+                setAttr(taskInputEl);
+                setAttr(taskDescriptionEl);
+                setText(taskEditEl, "Edit");
+                hideEditingError();
+            } else {
+                showEditingError(taskInputEl, taskDescriptionEl);
+            }
+        }
+    });
+
+    const taskDeleteEl = taskEl.querySelector(".delete");
+    taskDeleteEl.addEventListener("click", () => {
+        listEl.removeChild(taskEl);
+    });
+}
+
+function isTaskInputEmpty(taskInputEl) {
+    return taskInputEl.value.trim() === "";
+}
+
+function showEditingError(taskInputEl, taskDescriptionEl) {
+    const taskEl = taskInputEl.closest(".task-list__tasks");
+
+    if (!taskEl.querySelector(".task-list__error")) {
+        const errorEl = document.createElement("div");
+        addClasses(errorEl, ["task-list__error"]);
+        setText(errorEl, "Fields cannot be empty!");
+        taskEl.insertBefore(errorEl, taskEl.querySelector(".task-list__tasks"));
+    }
+
+    if (!taskInputEl.value) {
+        taskInputEl.focus();
+    }
+    if (!taskDescriptionEl.value) {
+        taskDescriptionEl.focus();
+    }
+}
+
+function hideEditingError() {
+    const errorEl = listEl.querySelector(".task-list__error");
+    if (errorEl) {
+        listEl.removeChild(errorEl);
+    }
+}
