@@ -154,12 +154,13 @@ function addListenersToTaskEl(
     });
 }
 
-function isTaskInputEmpty(taskInputEl) {
-    return taskInputEl.value.trim() === "";
+function isTaskInputEmpty(el) {
+    return el.value.trim() === "";
 }
 
-function showEditingError(taskInputEl, taskDescriptionEl) {
-    const taskEl = taskInputEl.closest(".task-list__tasks");
+function showEditingError(inputEl, descriptionEl) {
+    const taskEl = inputEl.closest(".task-list__tasks");
+    console.log(taskEl)
 
     if (!taskEl.querySelector(".task-list__error")) {
         const errorEl = document.createElement("div");
@@ -168,12 +169,8 @@ function showEditingError(taskInputEl, taskDescriptionEl) {
         taskEl.insertBefore(errorEl, taskEl.querySelector(".task-list__tasks"));
     }
 
-    if (!taskInputEl.value) {
-        taskInputEl.focus();
-    }
-    if (!taskDescriptionEl.value) {
-        taskDescriptionEl.focus();
-    }
+    if (!inputEl.value) inputEl.focus();
+    if (!descriptionEl.value) descriptionEl.focus();
 }
 
 function hideEditingError() {
