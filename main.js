@@ -5,6 +5,46 @@ const listEl = document.querySelector(".task-list__tasks");
 const errorEl = document.querySelector(".error");
 
 window.addEventListener("load", () => {
+    const tasks = getTasksFromLocalStorage();
+    tasks.forEach((task) => {
+        const taskEl = document.createElement("div");
+        addClasses(taskEl, ["task", "task-grid-container"]);
+
+        const taskInputEl = createTaskName(task.task);
+        const taskDescriptionEl = createTaskDescription(task.taskDescription);
+
+        addChildrenToParent(taskEl, [taskInputEl, taskDescriptionEl]);
+
+        const taskActionsEl = document.createElement("div");
+        addClasses(taskActionsEl, ["task__actions-item", "actions"]);
+
+        const taskEditEl = document.createElement("button");
+        addClasses(taskEditEl, ["edit"]);
+        setText(taskEditEl, "Edit");
+
+        const taskDeleteEl = document.createElement("button");
+        addClasses(taskDeleteEl, ["delete"]);
+        setText(taskDeleteEl, "Delete");
+
+        taskActionsEl.appendChild(taskEditEl);
+        taskActionsEl.appendChild(taskDeleteEl);
+
+        taskEl.appendChild(taskActionsEl);
+
+        const taskDate = document.createElement("p");
+        taskDate.innerText = new Date().toLocaleDateString();
+        addClasses(taskDate, ["task__date-item"]);
+        taskEl.appendChild(taskDate);
+
+        listEl.appendChild(taskEl);
+
+        addListenersToTaskEl(
+            taskEl,
+            taskInputEl,
+            taskDescriptionEl,
+            taskEditEl
+        );
+    });
     form.addEventListener("submit", (event) => {
         event.preventDefault();
 
@@ -55,6 +95,8 @@ window.addEventListener("load", () => {
                 taskDescriptionEl,
                 taskEditEl
             );
+
+            saveTaskToLocalStorage(task, taskDescription);
         }
     });
 });
@@ -145,13 +187,25 @@ function addListenersToTaskEl(
             } else {
                 showEditingError(taskInputEl, taskDescriptionEl);
             }
+            const updatedTask = {
+                task: taskInputEl.value,
+                taskDescription: taskDescriptionEl.value,
+            };
+            const taskIndex = Array.from(listEl.children).indexOf(taskEl);
+            updateTaskInLocalStorage(taskIndex, updatedTask);
         }
     });
 
     const taskDeleteEl = taskEl.querySelector(".delete");
     taskDeleteEl.addEventListener("click", () => {
+        const taskIndex = Array.from(listEl.children).indexOf(taskEl);
+
         listEl.removeChild(taskEl);
         hideEditingError();
+
+        const tasks = getTasksFromLocalStorage();
+        tasks.splice(taskIndex, 1);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
     });
 }
 
@@ -179,4 +233,35 @@ function hideEditingError() {
     if (errorEl) {
         taskList.removeChild(errorEl);
     }
+}
+
+function saveTaskToLocalStorage(task, taskDescription) {
+    const tasks = getTasksFromLocalStorage();
+    tasks.push({ task, taskDescription });
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function getTasksFromLocalStorage() {
+    const tasksString = localStorage.getItem("tasks");
+    return tasksString ? JSON.parse(tasksString) : [];
+}
+
+window.addEventListener("load", () => {
+    const tasks = getTasksFromLocalStorage();
+    tasks.forEach((task) => {
+        const taskEl = document.createElement("div");
+        addClasses(taskEl, ["task", "task-grid-container"]);
+    });
+});
+
+function updateTaskInLocalStorage(taskIndex, updatedTask) {
+    const tasks = getTasksFromLocalStorage();
+    tasks[taskIndex] = updatedTask;
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+function deleteTaskFromLocalStorage(taskIndex) {
+    const tasks = getTasksFromLocalStorage();
+    tasks.splice(taskIndex, 1);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
 }
