@@ -151,6 +151,7 @@ function addListenersToTaskEl(
     const taskDeleteEl = taskEl.querySelector(".delete");
     taskDeleteEl.addEventListener("click", () => {
         listEl.removeChild(taskEl);
+        hideEditingError();
     });
 }
 
@@ -160,7 +161,6 @@ function isTaskInputEmpty(el) {
 
 function showEditingError(inputEl, descriptionEl) {
     const taskEl = inputEl.closest(".task-list__tasks");
-    console.log(taskEl)
 
     if (!taskEl.querySelector(".task-list__error")) {
         const errorEl = document.createElement("div");
@@ -174,8 +174,9 @@ function showEditingError(inputEl, descriptionEl) {
 }
 
 function hideEditingError() {
-    const errorEl = listEl.querySelector(".task-list__error");
+    const taskList = document.querySelector(".task-list__tasks");
+    const errorEl = taskList.querySelector(".task-list__error");
     if (errorEl) {
-        listEl.removeChild(errorEl);
+        taskList.removeChild(errorEl);
     }
 }
