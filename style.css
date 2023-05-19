@@ -207,7 +207,8 @@ main {
     font-size: 0.5rem;
 }
 
-.error {
+.error,
+.task-list__error {
     display: flex;
     justify-content: center;
     margin: .5rem;
