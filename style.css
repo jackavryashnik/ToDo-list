@@ -26,7 +26,7 @@ header {
     padding: 2rem 1rem;
     max-width: 800px;
     width: 100%;
-    margin: 0 auto;
+    margin: 0 10%;
 }
 
 header h1 {
@@ -34,6 +34,10 @@ header h1 {
     font-weight: 300;
     margin-bottom: 1rem;
     color: var(--gray)
+}
+
+h2 {
+    margin-left: 10%;
 }
 
 input, button, textarea {
@@ -48,7 +52,7 @@ input, button, textarea {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: auto auto;
-    grid-gap: 10px;
+    grid-gap: .5rem;
     margin: auto 10%;
 }
 
@@ -62,6 +66,10 @@ input, button, textarea {
     grid-row: span 2;
     padding: 20px;
     text-align: center;
+}
+
+.creating-form {
+    width: fit-content;
 }
 
 .creating-form__input,
@@ -101,8 +109,11 @@ input, button, textarea {
     padding: 1rem;
 }
 
-.task {
-    margin-bottom: .5rem;
+.task-list__tasks {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .5rem;
 }
 
 .task-list h2 {
@@ -123,6 +134,10 @@ input, button, textarea {
 .task-list__tasks .task .task-content__title:not(:read-only),
 .task-list__tasks .task .task-content__description:not(:read-only) {
     color: var(--pink);
+}
+
+.task__task-content {
+    width: max-content;
 }
 
 .task .actions button {
@@ -156,7 +171,7 @@ input, button, textarea {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr;
     grid-template-rows: .5fr 1fr 1fr .5fr;
-    grid-gap: 10px;
+    grid-gap: .5rem;
 
     background-color: var(--darkest);
     border-radius: 1rem;
@@ -164,7 +179,7 @@ input, button, textarea {
 
 .task-content__title {
     grid-column: 1 / span 2;
-    padding: 10px;
+    padding: .5rem;
     text-align: center;
     color: var(--light);
 }
@@ -179,7 +194,7 @@ input, button, textarea {
 .task-content__description {
     grid-column: 1 / span 4;
     grid-row: 2 / span 2;
-    padding: 10px;
+    padding: .5rem;
     text-align: center;
     overflow: hidden;
     color: var(--light);
@@ -202,4 +217,19 @@ input, button, textarea {
     font-size: smaller;
 
     color: crimson;
+}
+
+@media (max-width: 1100px) {
+    .creating-form {
+        /* width: fit-content; */
+        max-width: 100%;
+    }
+    .task-list__tasks {
+        flex-direction: column;
+        align-items: center;
+        max-width: 100%;
+    }
+    .task {
+        flex-wrap: wrap;
+    }
 }
