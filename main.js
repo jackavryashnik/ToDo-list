@@ -1,5 +1,5 @@
 const form = document.querySelector(".creating-form");
-const input = document.querySelector(".creating-form__input");
+const title = document.querySelector(".creating-form__input");
 const description = document.querySelector(".creating-form__description");
 const listEl = document.querySelector(".task-list__tasks");
 const errorEl = document.querySelector(".error");
@@ -7,149 +7,155 @@ const errorEl = document.querySelector(".error");
 window.addEventListener("load", () => {
     const tasks = getTasksFromLocalStorage();
     tasks.forEach((task) => {
-        const taskEl = document.createElement("div");
-        addClasses(taskEl, ["task", "task-grid-container"]);
-
-        const taskInputEl = createTaskName(task.task);
-        const taskDescriptionEl = createTaskDescription(task.taskDescription);
-
-        addChildrenToParent(taskEl, [taskInputEl, taskDescriptionEl]);
-
-        const taskActionsEl = document.createElement("div");
-        addClasses(taskActionsEl, ["task__actions-item", "actions"]);
-
-        const taskEditEl = document.createElement("button");
-        addClasses(taskEditEl, ["edit"]);
-        setText(taskEditEl, "Edit");
-
-        const taskDeleteEl = document.createElement("button");
-        addClasses(taskDeleteEl, ["delete"]);
-        setText(taskDeleteEl, "Delete");
-
-        taskActionsEl.appendChild(taskEditEl);
-        taskActionsEl.appendChild(taskDeleteEl);
-
-        taskEl.appendChild(taskActionsEl);
-
-        const taskDate = document.createElement("p");
-        taskDate.innerText = new Date().toLocaleDateString();
-        addClasses(taskDate, ["task__date-item"]);
-        taskEl.appendChild(taskDate);
-
+        const taskEl = createTaskElement(task.taskTitle, task.taskDescription);
         listEl.appendChild(taskEl);
-
-        addListenersToTaskEl(
-            taskEl,
-            taskInputEl,
-            taskDescriptionEl,
-            taskEditEl
-        );
+        addListenersToTaskEl(taskEl);
     });
+
     form.addEventListener("submit", (event) => {
         event.preventDefault();
 
         if (!isFormValid()) {
-            showValdationError();
+            showValidationError();
         } else {
             hideValidationError();
-            const task = input.value;
+            const taskTitle = title.value;
             const taskDescription = description.value;
 
-            const taskEl = document.createElement("div");
-            addClasses(taskEl, ["task", "task-grid-container"]);
-
-            const taskInputEl = createTaskName(task);
-            const taskDescriptionEl = createTaskDescription(taskDescription);
-
-            addChildrenToParent(taskEl, [taskInputEl, taskDescriptionEl]);
-
-            const taskActionsEl = document.createElement("div");
-            addClasses(taskActionsEl, ["task__actions-item", "actions"]);
-
-            const taskEditEl = document.createElement("button");
-            addClasses(taskEditEl, ["edit"]);
-            setText(taskEditEl, "Edit");
-
-            const taskDeleteEl = document.createElement("button");
-            addClasses(taskDeleteEl, ["delete"]);
-            setText(taskDeleteEl, "Delete");
-
-            taskActionsEl.appendChild(taskEditEl);
-            taskActionsEl.appendChild(taskDeleteEl);
-
-            taskEl.appendChild(taskActionsEl);
-
-            const taskDate = document.createElement("p");
-            taskDate.innerText = new Date().toLocaleDateString();
-            addClasses(taskDate, ["task__date-item"]);
-            taskEl.appendChild(taskDate);
-
+            const taskEl = createTaskElement(taskTitle, taskDescription);
             listEl.appendChild(taskEl);
-
-            input.value = "";
+            title.value = "";
             description.value = "";
 
-            addListenersToTaskEl(
-                taskEl,
-                taskInputEl,
-                taskDescriptionEl,
-                taskEditEl
-            );
+            addListenersToTaskEl(taskEl);
 
-            saveTaskToLocalStorage(task, taskDescription);
+            saveTaskToLocalStorage(taskTitle, taskDescription);
         }
     });
 });
 
-function addClasses(el, arrOfClasses) {
-    for (const item of arrOfClasses) {
-        el.classList.add(item);
-    }
+function createTaskElement(taskTitle, taskDescription) {
+    const taskEl = document.createElement("div");
+    taskEl.classList.add("task");
+
+    const taskContent = document.createElement("div");
+    taskContent.classList.add("task__task-content");
+
+    const taskTitleEl = createField("input", taskTitle, [
+        "text",
+        "task-content__title",
+    ]);
+    setReadonlyAttribute(taskTitleEl);
+    taskContent.appendChild(taskTitleEl);
+
+    const taskDescriptionEl = createField("textarea", taskDescription, [
+        "task-content__description",
+    ]);
+    setReadonlyAttribute(taskDescriptionEl);
+    taskContent.appendChild(taskDescriptionEl);
+
+    const taskActionsEl = document.createElement("div");
+    taskActionsEl.classList.add("task-content__actions", "actions");
+
+    const taskEditEl = createButton("Edit");
+    const taskDeleteEl = createButton("Delete");
+
+    taskEditEl.classList.add("edit");
+    taskDeleteEl.classList.add("delete");
+
+    taskActionsEl.appendChild(taskEditEl);
+    taskActionsEl.appendChild(taskDeleteEl);
+    taskContent.appendChild(taskActionsEl);
+
+    const taskDate = document.createElement("p");
+    taskDate.innerText = new Date().toLocaleDateString();
+    taskDate.classList.add("task-content__date");
+    taskContent.appendChild(taskDate);
+
+    const taskErrorEl = document.createElement("div");
+    taskErrorEl.classList.add("task__error");
+
+    taskEl.appendChild(taskContent);
+    taskEl.appendChild(taskErrorEl);
+
+    return taskEl;
 }
 
-function setText(el, text) {
-    el.textContent = text;
+function createField(type, value, classes) {
+    const element = document.createElement(type);
+    element.value = value;
+    element.classList.add(...classes);
+    return element;
 }
 
-function setAttr(el) {
-    el.setAttribute("readonly", "readonly");
+function createButton(text) {
+    const button = document.createElement("button");
+    button.textContent = text;
+    return button;
 }
 
-function removeAttr(el) {
-    el.removeAttribute("readonly");
+function addListenersToTaskEl(taskEl) {
+    const taskEditEl = taskEl.querySelector(".edit");
+    const taskTitleEl = taskEl.querySelector(".task-content__title");
+    const taskDescriptionEl = taskEl.querySelector(
+        ".task-content__description"
+    );
+    const taskErrorEl = taskEl.querySelector(".task__error");
+
+    taskEditEl.addEventListener("click", () => {
+        if (taskEditEl.innerText.toLowerCase() === "edit") {
+            removeReadonlyAttribute(taskTitleEl);
+            removeReadonlyAttribute(taskDescriptionEl);
+            taskEditEl.textContent = "Save";
+            taskDescriptionEl.focus();
+        } else {
+            if (
+                !isTaskFieldEmpty(taskTitleEl) &&
+                !isTaskFieldEmpty(taskDescriptionEl)
+            ) {
+                setReadonlyAttribute(taskTitleEl);
+                setReadonlyAttribute(taskDescriptionEl);
+                taskEditEl.textContent = "Edit";
+                hideEditingError(taskErrorEl);
+            } else {
+                showEditingError(taskErrorEl, taskTitleEl, taskDescriptionEl);
+            }
+            const updatedTask = {
+                taskTitle: taskTitleEl.value,
+                taskDescription: taskDescriptionEl.value,
+            };
+            const taskIndex = Array.from(listEl.children).indexOf(taskEl);
+            updateTaskInLocalStorage(taskIndex, updatedTask);
+        }
+    });
+    const taskDeleteEl = taskEl.querySelector(".delete");
+    taskDeleteEl.addEventListener("click", () => {
+        const taskIndex = Array.from(listEl.children).indexOf(taskEl);
+
+        listEl.removeChild(taskEl);
+        hideEditingError(taskErrorEl);
+
+        deleteTaskFromLocalStorage(taskIndex);
+    });
+}
+
+function setReadonlyAttribute(element) {
+    element.setAttribute("readonly", "readonly");
+}
+
+function removeReadonlyAttribute(element) {
+    element.removeAttribute("readonly");
 }
 
 function isFormValid() {
-    return !(!input.value.trim() || !description.value.trim());
+    return title.value.trim() !== "" && description.value.trim() !== "";
 }
 
-function createTaskName(task) {
-    const taskName = document.createElement("input");
-    taskName.type = "text";
-    taskName.value = task;
-    addClasses(taskName, ["text", "task__title-item"]);
-    setAttr(taskName);
-    return taskName;
-}
-
-function createTaskDescription(description) {
-    const taskDescription = document.createElement("textarea");
-    taskDescription.value = description;
-    addClasses(taskDescription, ["task__description-item"]);
-    setAttr(taskDescription);
-    return taskDescription;
-}
-
-function addChildrenToParent(parent, children) {
-    parent.append(...children);
-}
-
-function showValdationError() {
+function showValidationError() {
     const messages = [];
-    if (input.value === "" || input.value === null) {
+    if (title.value === "" || title.value === null) {
         messages.push("Title is required");
     }
-
     if (description.value === "" || description.value === null) {
         messages.push("Description is required");
     }
@@ -163,81 +169,23 @@ function hideValidationError() {
     errorEl.innerText = "";
 }
 
-function addListenersToTaskEl(
-    taskEl,
-    taskInputEl,
-    taskDescriptionEl,
-    taskEditEl
-) {
-    taskEditEl.addEventListener("click", () => {
-        if (taskEditEl.innerText.toLowerCase() == "edit") {
-            removeAttr(taskInputEl);
-            removeAttr(taskDescriptionEl);
-            setText(taskEditEl, "Save");
-            taskDescriptionEl.focus();
-        } else {
-            if (
-                !isTaskInputEmpty(taskInputEl) &&
-                !isTaskInputEmpty(taskDescriptionEl)
-            ) {
-                setAttr(taskInputEl);
-                setAttr(taskDescriptionEl);
-                setText(taskEditEl, "Edit");
-                hideEditingError();
-            } else {
-                showEditingError(taskInputEl, taskDescriptionEl);
-            }
-            const updatedTask = {
-                task: taskInputEl.value,
-                taskDescription: taskDescriptionEl.value,
-            };
-            const taskIndex = Array.from(listEl.children).indexOf(taskEl);
-            updateTaskInLocalStorage(taskIndex, updatedTask);
-        }
-    });
-
-    const taskDeleteEl = taskEl.querySelector(".delete");
-    taskDeleteEl.addEventListener("click", () => {
-        const taskIndex = Array.from(listEl.children).indexOf(taskEl);
-
-        listEl.removeChild(taskEl);
-        hideEditingError();
-
-        const tasks = getTasksFromLocalStorage();
-        tasks.splice(taskIndex, 1);
-        localStorage.setItem("tasks", JSON.stringify(tasks));
-    });
+function isTaskFieldEmpty(element) {
+    return element.value.trim() === "";
 }
 
-function isTaskInputEmpty(el) {
-    return el.value.trim() === "";
-}
-
-function showEditingError(inputEl, descriptionEl) {
-    const taskEl = inputEl.closest(".task-list__tasks");
-
-    if (!taskEl.querySelector(".task-list__error")) {
-        const errorEl = document.createElement("div");
-        addClasses(errorEl, ["task-list__error"]);
-        setText(errorEl, "Fields cannot be empty!");
-        taskEl.insertBefore(errorEl, taskEl.querySelector(".task-list__tasks"));
-    }
-
-    if (!inputEl.value) inputEl.focus();
+function showEditingError(errorEl, titleEl, descriptionEl) {
+    errorEl.innerText = "Fields cannot be empty!";
+    if (!titleEl.value) titleEl.focus();
     if (!descriptionEl.value) descriptionEl.focus();
 }
 
-function hideEditingError() {
-    const taskList = document.querySelector(".task-list__tasks");
-    const errorEl = taskList.querySelector(".task-list__error");
-    if (errorEl) {
-        taskList.removeChild(errorEl);
-    }
+function hideEditingError(errorEl) {
+    errorEl.innerText = "";
 }
 
-function saveTaskToLocalStorage(task, taskDescription) {
+function saveTaskToLocalStorage(taskTitle, taskDescription) {
     const tasks = getTasksFromLocalStorage();
-    tasks.push({ task, taskDescription });
+    tasks.push({ taskTitle, taskDescription });
     localStorage.setItem("tasks", JSON.stringify(tasks));
 }
 
@@ -245,14 +193,6 @@ function getTasksFromLocalStorage() {
     const tasksString = localStorage.getItem("tasks");
     return tasksString ? JSON.parse(tasksString) : [];
 }
-
-window.addEventListener("load", () => {
-    const tasks = getTasksFromLocalStorage();
-    tasks.forEach((task) => {
-        const taskEl = document.createElement("div");
-        addClasses(taskEl, ["task", "task-grid-container"]);
-    });
-});
 
 function updateTaskInLocalStorage(taskIndex, updatedTask) {
     const tasks = getTasksFromLocalStorage();
